@@ -4,6 +4,9 @@
 import pygame, sys
 pygame.init()
 
+title = " "
+#J = "Zombie Parashooter"
+
 background = pygame.image.load("zombie.jpg")
 # Define some colours
 BLACK = (0, 0, 0)
@@ -74,7 +77,10 @@ class Button():
         self.call_back_()
         
 def my_hello():
-    print('hello')
+
+    
+    print('')
+
     global level
     level = 4
 
@@ -104,6 +110,13 @@ def my_quit_function():
     pygame.quit()
     sys.exit()
 
+def my_instunction_function():
+    """A function that will instruct the player on how to play the game"""
+    global level
+    bg = GREEN
+    level = 5
+    
+
 def mousebuttondown(level):
     """A function that checks which button was pressed"""
     pos = pygame.mouse.get_pos()
@@ -124,6 +137,11 @@ def mousebuttondown(level):
             if button.rect.collidepoint(pos):
                 button.call_back()
 
+    elif level == 5:
+        for button in level5_buttons:
+            if button.rect.collidepoint(pos):
+                button.call_back()
+
                 
 def play_music():
     pygame.mixer.music.unpause()
@@ -131,33 +149,43 @@ def stop_music():
     pygame.mixer.music.pause()
 
 level = 1
+title = "Zombie Parashooter"
+titlesize = 30
 
 carryOn = True
 clock = pygame.time.Clock()
 
 #create button objects
-fontTitle = pygame.font.Font('freesansbold.ttf', 30)
-textSurfaceTitle = fontTitle.render('Zombie Parashooter', True, BLACK) 
+
+fontTitle = pygame.font.Font('freesansbold.ttf', titlesize)
+textSurfaceTitle = fontTitle.render(title, True, BLACK) 
+>>>>>>> ed53b52e0f8e7289537c8cd6b22e20fc99d6148d
 textRectTitle = textSurfaceTitle.get_rect()
 textRectTitle.center = (370,50)  
 
 
 
-button_HELLO = Button("HELLO", (SCREENWIDTH/2, SCREENHEIGHT/4), my_hello, bg=RED)
+
+button_HELLO = Button("PLAY", (SCREENWIDTH/2, SCREENHEIGHT/4), my_hello, bg=RED)
 button_Previous = Button("PREVIOUS", (SCREENWIDTH/2, SCREENHEIGHT/4), my_previous_function,bg=RED)
 button_SETTINGS = Button("SETTINGS", (SCREENWIDTH/2, SCREENHEIGHT*2/4),my_next_function, bg=GREEN)
 button_QUIT = Button("QUIT", (SCREENWIDTH/2, SCREENHEIGHT*3/4), my_quit_function, bg=Blue)
-button_Sound = Button("Sound", (SCREENWIDTH/2, SCREENHEIGHT*1/4),my_next_function, bg=GREEN)
+button_Sound = Button("SOUND", (SCREENWIDTH/2, SCREENHEIGHT*1/4),my_next_function, bg=GREEN)
+
 button_ON = Button("ON", (SCREENWIDTH/2, SCREENHEIGHT/4), play_music,bg=GREEN)
 button_OFF= Button("OFF", (SCREENWIDTH/2, SCREENHEIGHT*2/4),stop_music, bg=GREEN)
 button_Previous2 = Button("PREVIOUS", (SCREENWIDTH/2, SCREENHEIGHT*3/4), my_previous_function,bg=RED)
 button_Previous3 = Button("PREVIOUS", (100, 481), my_previous_function2,bg=RED)
 
+button_INSTRUCTIONS = Button("INSTRUCTIONS", (SCREENWIDTH/2, SCREENHEIGHT*2/4),my_instunction_function, bg=GREEN)
+
 #arrange button groups depending on level
 level1_buttons = [button_HELLO,button_SETTINGS, button_QUIT]
 level2_buttons = [button_Previous2,button_Sound]
 level3_buttons = [button_ON,button_OFF,button_Previous2]
-level4_buttons = [button_Previous3]
+
+level4_buttons = [button_Previous3, button_INSTRUCTIONS]
+level5_buttons = [button_Previous2]
 #---------Main Program Loop----------
 screen.blit(background, (0, 0))
 while carryOn:
@@ -167,6 +195,7 @@ while carryOn:
             carryOn = False
         elif event.type == pygame.MOUSEBUTTONDOWN: # Player clicked the mouse
             mousebuttondown(level)
+
 
     # --- Game logic goes here
 
@@ -180,17 +209,34 @@ while carryOn:
 
     # Draw buttons
     if level == 1:
+
+        title = "Zombie Parashooter"
         for button in level1_buttons:
             button.draw()
     elif level == 2:
+        title = "Settings"
         for button in level2_buttons:
             button.draw()
     elif level == 3:
+        title = "Sound"
+
         for button in level3_buttons:
             button.draw()
     elif level == 4:
         for button in level4_buttons:
             button.draw()
+    elif level == 5:
+        title = "'A' to move left"
+        titlesize = 10
+        for button in level5_buttons:
+            button.draw()
+
+    # Add title
+    
+    textSurfaceTitle = fontTitle.render(title, True, BLACK) 
+    textRectTitle = textSurfaceTitle.get_rect()
+    textRectTitle.center = (370,50)
+
 
     # Update the screen with queued shapes
     pygame.display.flip()
