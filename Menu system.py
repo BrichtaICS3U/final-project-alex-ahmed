@@ -4,7 +4,7 @@
 import pygame, sys
 pygame.init()
 
-background = pygame.image.load("image.jpg")
+background = pygame.image.load("zombie.jpg")
 # Define some colours
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -15,8 +15,8 @@ BRIGHT_RED = (241,126,137)
 BRIGHT_Blue = (135,212,223)
 Blue = (67,188,205)
 
-SCREENWIDTH = 800
-SCREENHEIGHT = 533
+SCREENWIDTH = 740
+SCREENHEIGHT = 521
 size = (SCREENWIDTH, SCREENHEIGHT)
 screen = pygame.display.set_mode(size)
 
@@ -75,6 +75,8 @@ class Button():
         
 def my_hello():
     print('hello')
+    global level
+    level = 4
 
 def my_shell_function():
     """A generic function that prints something in the shell"""
@@ -90,6 +92,12 @@ def my_previous_function():
     bg = RED
     global level
     level -= 1
+
+def my_previous_function2():
+    """A function that retreats to the previous level"""
+    bg = RED
+    global level
+    level = 1
 
 def my_quit_function():
     """A function that will quit the game and close the pygame window"""
@@ -111,6 +119,12 @@ def mousebuttondown(level):
         for button in level3_buttons:
             if button.rect.collidepoint(pos):
                 button.call_back()
+    elif level == 4:
+        for button in level4_buttons:
+            if button.rect.collidepoint(pos):
+                button.call_back()
+
+                
 def play_music():
     pygame.mixer.music.unpause()
 def stop_music():
@@ -122,25 +136,66 @@ carryOn = True
 clock = pygame.time.Clock()
 
 #create button objects
-fontTitle = pygame.font.Font('freesansbold.ttf', 26)
-textSurfaceTitle = fontTitle.render('My Awesome Game!', True, WHITE) 
+fontTitle = pygame.font.Font('freesansbold.ttf', 30)
+textSurfaceTitle = fontTitle.render('Zombie Parashooter', True, BLACK) 
 textRectTitle = textSurfaceTitle.get_rect()
-textRectTitle.center = (400,50)  
+textRectTitle.center = (370,50)  
 
 
 
 button_HELLO = Button("HELLO", (SCREENWIDTH/2, SCREENHEIGHT/4), my_hello, bg=RED)
-button_Previous = Button("Previous", (SCREENWIDTH/2, SCREENHEIGHT/4), my_previous_function,bg=RED)
+button_Previous = Button("PREVIOUS", (SCREENWIDTH/2, SCREENHEIGHT/4), my_previous_function,bg=RED)
 button_SETTINGS = Button("SETTINGS", (SCREENWIDTH/2, SCREENHEIGHT*2/4),my_next_function, bg=GREEN)
 button_QUIT = Button("QUIT", (SCREENWIDTH/2, SCREENHEIGHT*3/4), my_quit_function, bg=Blue)
-button_Sound = Button("Sound", (SCREENWIDTH/2, SCREENHEIGHT*2/4),my_next_function, bg=GREEN)
+button_Sound = Button("Sound", (SCREENWIDTH/2, SCREENHEIGHT*1/4),my_next_function, bg=GREEN)
 button_ON = Button("ON", (SCREENWIDTH/2, SCREENHEIGHT/4), play_music,bg=GREEN)
 button_OFF= Button("OFF", (SCREENWIDTH/2, SCREENHEIGHT*2/4),stop_music, bg=GREEN)
-button_Previous2 = Button("Previous", (SCREENWIDTH/2, SCREENHEIGHT*3/4), my_previous_function,bg=RED)
+button_Previous2 = Button("PREVIOUS", (SCREENWIDTH/2, SCREENHEIGHT*3/4), my_previous_function,bg=RED)
+button_Previous3 = Button("PREVIOUS", (100, 481), my_previous_function2,bg=RED)
 
 #arrange button groups depending on level
 level1_buttons = [button_HELLO,button_SETTINGS, button_QUIT]
 level2_buttons = [button_Previous2,button_Sound]
-level3_buttons = [button_ON,button_OFF,button_Previous2] 
+level3_buttons = [button_ON,button_OFF,button_Previous2]
+level4_buttons = [button_Previous3]
 #---------Main Program Loop----------
 screen.blit(background, (0, 0))
+while carryOn:
+    # --- Main event loop ---
+    for event in pygame.event.get(): # Player did something
+        if event.type == pygame.QUIT: # Player clicked close button
+            carryOn = False
+        elif event.type == pygame.MOUSEBUTTONDOWN: # Player clicked the mouse
+            mousebuttondown(level)
+
+    # --- Game logic goes here
+
+    # --- Draw code goes here
+    screen.fill(WHITE)
+    screen.blit(background, (0, 0))
+    screen.blit(textSurfaceTitle,textRectTitle)
+
+    # Clear the screen to white
+    
+
+    # Draw buttons
+    if level == 1:
+        for button in level1_buttons:
+            button.draw()
+    elif level == 2:
+        for button in level2_buttons:
+            button.draw()
+    elif level == 3:
+        for button in level3_buttons:
+            button.draw()
+    elif level == 4:
+        for button in level4_buttons:
+            button.draw()
+
+    # Update the screen with queued shapes
+    pygame.display.flip()
+
+    # --- Limit to 60 frames per second
+    clock.tick(60)
+
+pygame.quit()
