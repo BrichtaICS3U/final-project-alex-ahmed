@@ -4,6 +4,9 @@
 import pygame, sys
 pygame.init()
 title = " "
+title2 = " "
+title3 = " "
+title4 = " "
 #J = "Zombie Parashooter"
 background = pygame.image.load("zombie.jpg")
 # Define some colours
@@ -144,7 +147,9 @@ def stop_music():
 
 level = 1
 title = "Zombie Parashooter"
+title2 = "'D' to move right"
 titlesize = 30
+titlex = 370
 
 carryOn = True
 clock = pygame.time.Clock()
@@ -155,7 +160,10 @@ textSurfaceTitle = fontTitle.render(title, True, BLACK)
 textRectTitle = textSurfaceTitle.get_rect()
 textRectTitle.center = (370,50)  
 
-
+fontTitle2 = pygame.font.Font('freesansbold.ttf', titlesize)
+textSurfaceTitle2 = fontTitle2.render(title2, True, BLACK) 
+textRectTitle2 = textSurfaceTitle2.get_rect()
+textRectTitle2.center = (370,80)
 
 button_HELLO = Button("PLAY", (SCREENWIDTH/2, SCREENHEIGHT/4), my_hello, bg=RED)
 button_Previous = Button("PREVIOUS", (SCREENWIDTH/2, SCREENHEIGHT/4), my_previous_function,bg=RED)
@@ -190,7 +198,7 @@ while carryOn:
     # --- Draw code goes here
     screen.fill(WHITE)
     screen.blit(background, (0, 0))
-    screen.blit(textSurfaceTitle,textRectTitle)
+    
 
     # Clear the screen to white
     
@@ -213,16 +221,23 @@ while carryOn:
             button.draw()
     elif level == 5:
         title = "'A' to move left"
-        titlesize = 10
+        title2 = "'D' to move right"
+        titlesize = 20
         for button in level5_buttons:
             button.draw()
 
     # Add title
-    
+    fontTitle = pygame.font.Font('freesansbold.ttf', titlesize)
     textSurfaceTitle = fontTitle.render(title, True, BLACK) 
     textRectTitle = textSurfaceTitle.get_rect()
     textRectTitle.center = (370,50)
-
+    screen.blit(textSurfaceTitle,textRectTitle)
+    if level == 5:
+        fontTitle2 = pygame.font.Font('freesansbold.ttf', titlesize)
+        textSurfaceTitle2 = fontTitle2.render(title2, True, BLACK) 
+        textRectTitle2 = textSurfaceTitle2.get_rect()
+        textRectTitle2.center = (370,80)
+        screen.blit(textSurfaceTitle2,textRectTitle2)
     # Update the screen with queued shapes
     pygame.display.flip()
 
