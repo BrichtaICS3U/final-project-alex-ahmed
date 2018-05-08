@@ -137,10 +137,6 @@ def mousebuttondown(level):
             if button.rect.collidepoint(pos):
                 button.call_back()
 
-    elif level == 5:
-        for button in level5_buttons:
-            if button.rect.collidepoint(pos):
-                button.call_back()
 
                 
 def play_music():
@@ -159,7 +155,6 @@ clock = pygame.time.Clock()
 
 fontTitle = pygame.font.Font('freesansbold.ttf', titlesize)
 textSurfaceTitle = fontTitle.render(title, True, BLACK) 
->>>>>>> ed53b52e0f8e7289537c8cd6b22e20fc99d6148d
 textRectTitle = textSurfaceTitle.get_rect()
 textRectTitle.center = (370,50)  
 
@@ -177,15 +172,14 @@ button_OFF= Button("OFF", (SCREENWIDTH/2, SCREENHEIGHT*2/4),stop_music, bg=GREEN
 button_Previous2 = Button("PREVIOUS", (SCREENWIDTH/2, SCREENHEIGHT*3/4), my_previous_function,bg=RED)
 button_Previous3 = Button("PREVIOUS", (100, 481), my_previous_function2,bg=RED)
 
-button_INSTRUCTIONS = Button("INSTRUCTIONS", (SCREENWIDTH/2, SCREENHEIGHT*2/4),my_instunction_function, bg=GREEN)
+button_CONTINUE = Button("CONTINUE", (SCREENWIDTH*3.5/4, SCREENHEIGHT*3.7/4),my_instunction_function, bg=GREEN)
 
 #arrange button groups depending on level
 level1_buttons = [button_HELLO,button_SETTINGS, button_QUIT]
 level2_buttons = [button_Previous2,button_Sound]
 level3_buttons = [button_ON,button_OFF,button_Previous2]
 
-level4_buttons = [button_Previous3, button_INSTRUCTIONS]
-level5_buttons = [button_Previous2]
+level4_buttons = [button_Previous3, button_CONTINUE]
 #---------Main Program Loop----------
 screen.blit(background, (0, 0))
 while carryOn:
@@ -223,20 +217,16 @@ while carryOn:
         for button in level3_buttons:
             button.draw()
     elif level == 4:
+        title = "Game Instructions"
         for button in level4_buttons:
             button.draw()
-    elif level == 5:
-        title = "'A' to move left"
-        titlesize = 10
-        for button in level5_buttons:
-            button.draw()
-
+    
     # Add title
     
     textSurfaceTitle = fontTitle.render(title, True, BLACK) 
     textRectTitle = textSurfaceTitle.get_rect()
     textRectTitle.center = (370,50)
-
+    fontTitle = pygame.font.Font('freesansbold.ttf', titlesize)
 
     # Update the screen with queued shapes
     pygame.display.flip()
