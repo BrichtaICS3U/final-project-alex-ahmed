@@ -5,6 +5,12 @@ import pygame, sys
 pygame.init()
 
 title = " "
+title2 = " "
+title3 = " "
+title4 = " "
+title5 = " "
+title6 = " "
+
 #J = "Zombie Parashooter"
 
 background = pygame.image.load("zombie.jpg")
@@ -15,9 +21,10 @@ GREEN = (177, 227, 102)
 BRIGHT_GREEN = (205, 237, 157)
 RED = (234, 53, 70)
 BRIGHT_RED = (241,126,137)
+BOLD_RED = (226,0,0)
 BRIGHT_Blue = (135,212,223)
 Blue = (67,188,205)
-
+LIGHT_BLUE = (0, 232, 224)
 SCREENWIDTH = 740
 SCREENHEIGHT = 521
 size = (SCREENWIDTH, SCREENHEIGHT)
@@ -166,7 +173,6 @@ button_Previous = Button("PREVIOUS", (SCREENWIDTH/2, SCREENHEIGHT/4), my_previou
 button_SETTINGS = Button("SETTINGS", (SCREENWIDTH/2, SCREENHEIGHT*2/4),my_next_function, bg=GREEN)
 button_QUIT = Button("QUIT", (SCREENWIDTH/2, SCREENHEIGHT*3/4), my_quit_function, bg=Blue)
 button_Sound = Button("SOUND", (SCREENWIDTH/2, SCREENHEIGHT*1/4),my_next_function, bg=GREEN)
-
 button_ON = Button("ON", (SCREENWIDTH/2, SCREENHEIGHT/4), play_music,bg=GREEN)
 button_OFF= Button("OFF", (SCREENWIDTH/2, SCREENHEIGHT*2/4),stop_music, bg=GREEN)
 button_Previous2 = Button("PREVIOUS", (SCREENWIDTH/2, SCREENHEIGHT*3/4), my_previous_function,bg=RED)
@@ -176,9 +182,8 @@ button_CONTINUE = Button("CONTINUE", (SCREENWIDTH*3.5/4, SCREENHEIGHT*3.7/4),my_
 
 #arrange button groups depending on level
 level1_buttons = [button_HELLO,button_SETTINGS, button_QUIT]
-level2_buttons = [button_Previous2,button_Sound]
+level2_buttons = [button_Previous2,button_Sound,]
 level3_buttons = [button_ON,button_OFF,button_Previous2]
-
 level4_buttons = [button_Previous3, button_CONTINUE]
 #---------Main Program Loop----------
 screen.blit(background, (0, 0))
@@ -203,29 +208,72 @@ while carryOn:
 
     # Draw buttons
     if level == 1:
-
+        colour = BLACK
         title = "Zombie Parashooter"
         for button in level1_buttons:
             button.draw()
     elif level == 2:
+        colour = BLACK
         title = "Settings"
         for button in level2_buttons:
             button.draw()
     elif level == 3:
+        colour = BLACK
         title = "Sound"
 
         for button in level3_buttons:
             button.draw()
     elif level == 4:
+        colour = BLACK
         title = "Game Instructions"
+        title2 = "'D' to move right"
+        title3 = "'A' to move left"
+        title4 = "Use Mouse to aim"
+        title5 = "Click Left Mouse Button to Shoot"
+        title6 = "Objective: Eliminate all Zombies. Good Luck."
+
+
         for button in level4_buttons:
             button.draw()
     
     # Add title
     
-    textSurfaceTitle = fontTitle.render(title, True, BLACK) 
+    textSurfaceTitle = fontTitle.render(title, True, colour) 
     textRectTitle = textSurfaceTitle.get_rect()
     textRectTitle.center = (370,50)
+
+    screen.blit(textSurfaceTitle,textRectTitle)
+    if level == 4:
+        fontTitle2 = pygame.font.Font('freesansbold.ttf', 20)
+        textSurfaceTitle2 = fontTitle2.render(title2, True, LIGHT_BLUE) 
+        textRectTitle2 = textSurfaceTitle2.get_rect()
+        textRectTitle2.center = (370,150)
+        screen.blit(textSurfaceTitle2,textRectTitle2)
+
+        fontTitle3 = pygame.font.Font('freesansbold.ttf', 20)
+        textSurfaceTitle3 = fontTitle3.render(title3, True, LIGHT_BLUE) 
+        textRectTitle3 = textSurfaceTitle3.get_rect()
+        textRectTitle3.center = (370,210)
+        screen.blit(textSurfaceTitle3,textRectTitle3)
+
+        fontTitle4 = pygame.font.Font('freesansbold.ttf', 20)
+        textSurfaceTitle4 = fontTitle4.render(title4, True, Blue) 
+        textRectTitle4 = textSurfaceTitle4.get_rect()
+        textRectTitle4.center = (370,270)
+        screen.blit(textSurfaceTitle4,textRectTitle4)
+
+        fontTitle5 = pygame.font.Font('freesansbold.ttf', 20)
+        textSurfaceTitle5 = fontTitle5.render(title5, True, Blue) 
+        textRectTitle5 = textSurfaceTitle5.get_rect()
+        textRectTitle5.center = (370,330)
+        screen.blit(textSurfaceTitle5,textRectTitle5)
+
+        fontTitle6 = pygame.font.Font('freesansbold.ttf', 20)
+        textSurfaceTitle6 = fontTitle6.render(title6, True, Blue) 
+        textRectTitle6 = textSurfaceTitle6.get_rect()
+        textRectTitle6.center = (370,390)
+        screen.blit(textSurfaceTitle6,textRectTitle6)
+    
     fontTitle = pygame.font.Font('freesansbold.ttf', titlesize)
 
     # Update the screen with queued shapes
