@@ -1,9 +1,63 @@
+import math
+import pygame, sys, random
+from SpriteClass import Player
+
+
+class Enemy(pygame.sprite.Sprite):
+
+    def __init__(self, width2, height2, speed2):
+
+        super().__init__()
+
+        self.image = pygame.image.load("zombie.png").convert()
+        self.image.set_colorkey(WHITE)
+        self.image = pygame.transform.scale(self.image,(width2, height2))
+
+        self.width2 = width2
+        self.height2 = height2
+        self.speed = speed2
+        #self.attack = attack
+
+        self.rect = self.image.get_rect()
+
+    def moveRight2(self, pixels):
+        self.rect.x += pixels
+
+    def moveLeft2(self, pixels):
+        self.rect.x -= pixels
+
+    def changeSpeed2(self, speed):
+        self.speed = speed
+
+    def moveForward2(self, speed):
+        self.rect.x += self.speed * speed / 20
+
+    def changeSpeed(self, speed):
+        self.speed = speed
+
+    def moveHorizontal(self, speed) :
+        self.rect.x += self.speed * speed / 20
+
+
+    def move_towards_player(self, player, speed):
+        # find normalized direction vector (dx, dy) between enemy and player
+        dx, dy = self.rect.x - playerMain.rect.x, self.rect.y - playerMain.rect.y
+        dist = math.hypot(dx, dy)
+        dx, dy = dx / dist, dy / dist
+        # move along this normalized vector towards the player at current speed
+        self.rect.x += dx * self.speed
+        self.rect.y += dy * self.speed
+
+
+
 # Menu template with button class and basic menu navigation
 # Adapted from http://www.dreamincode.net/forums/topic/401541-buttons-and-sliders-in-pygame/
-
-import pygame, sys, random
+#import math
+#import pygame, sys, random
 pygame.init()
-from PlayerClass import Player
+#from PlayerClass import Player
+#from SpriteClass import Player
+#from EnemyClass import Enemy
 
 title = " "
 title2 = " "
@@ -14,7 +68,7 @@ title6 = " "
 speed = 1
 #J = "Zombie Parashooter"
 
-background = pygame.image.load("zombie.jpg")
+background = pygame.image.load("bg.jpg")
 # Define some colours
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -30,8 +84,8 @@ PURE_GREEN = (0, 255, 0)
 PURE_BLUE = (0, 0, 255)
 LIGHT_BLUE = (0, 232, 224)
 
-SCREENWIDTH = 740
-SCREENHEIGHT = 521
+SCREENWIDTH = 800
+SCREENHEIGHT = 600
 size = (SCREENWIDTH, SCREENHEIGHT)
 screen = pygame.display.set_mode(size)
 all_sprites_list = pygame.sprite.Group()
@@ -156,7 +210,6 @@ def mousebuttondown(level):
                 
 def play_music():
     pygame.mixer.music.unpause()
-    background = pygame.image.load("bg.jpg")
 def stop_music():
     pygame.mixer.music.pause()
 
@@ -164,7 +217,7 @@ level = 1
 title = "Zombie Parashooter"
 title2 = "'D' to move right"
 titlesize = 30
-titlex = 370
+titlex = 400
 
 carryOn = True
 clock = pygame.time.Clock()
@@ -174,12 +227,12 @@ clock = pygame.time.Clock()
 fontTitle = pygame.font.Font('freesansbold.ttf', titlesize)
 textSurfaceTitle = fontTitle.render(title, True, BLACK) 
 textRectTitle = textSurfaceTitle.get_rect()
-textRectTitle.center = (370,50)  
+textRectTitle.center = (400,50)  
 
 fontTitle2 = pygame.font.Font('freesansbold.ttf', titlesize)
 textSurfaceTitle2 = fontTitle2.render(title2, True, BLACK) 
 textRectTitle2 = textSurfaceTitle2.get_rect()
-textRectTitle2.center = (370,80)
+textRectTitle2.center = (400,80)
 
 
 button_HELLO = Button("PLAY", (SCREENWIDTH/2, SCREENHEIGHT/4), my_hello, bg=RED)
@@ -190,7 +243,7 @@ button_Sound = Button("SOUND", (SCREENWIDTH/2, SCREENHEIGHT*1/4),my_next_functio
 button_ON = Button("ON", (SCREENWIDTH/2, SCREENHEIGHT/4), play_music,bg=GREEN)
 button_OFF= Button("OFF", (SCREENWIDTH/2, SCREENHEIGHT*2/4),stop_music, bg=GREEN)
 button_Previous2 = Button("PREVIOUS", (SCREENWIDTH/2, SCREENHEIGHT*3/4), my_previous_function,bg=RED)
-button_Previous3 = Button("PREVIOUS", (100, 481), my_previous_function2,bg=RED)
+button_Previous3 = Button("PREVIOUS", (SCREENWIDTH*0.5/4, SCREENHEIGHT*3.7/4), my_previous_function2,bg=RED)
 
 button_CONTINUE = Button("CONTINUE", (SCREENWIDTH*3.5/4, SCREENHEIGHT*3.7/4),my_next_function, bg=GREEN)
 
@@ -204,9 +257,42 @@ level5_buttons = [button_Previous3]
 #create player
 playerMain = Player(80, 80, 20)
 playerMain.rect.x = SCREENWIDTH/2
-playerMain.rect.y = SCREENHEIGHT - 100
+playerMain.rect.y = SCREENHEIGHT - 120
+
+enemy1 = Enemy(80, 80, 80)
+enemy1.rect.x = 50
+enemy1.rect.y = SCREENHEIGHT - 120
+
+enemy2 = Enemy(80, 80, 80)
+enemy2.rect.x = 200
+enemy2.rect.y = SCREENHEIGHT - 120
+
+enemy3 = Enemy(80, 80, 80)
+enemy3.rect.x = 350
+enemy3.rect.y = SCREENHEIGHT - 120
+
+enemy4 = Enemy(80, 80, 80)
+enemy4.rect.x = 500
+enemy4.rect.y = SCREENHEIGHT - 120
+
+enemy5 = Enemy(80, 80, 80)
+enemy5.rect.x = 650
+enemy5.rect.y = SCREENHEIGHT - 120
 
 all_sprites_list.add(playerMain)
+all_sprites_list.add(enemy1)
+all_sprites_list.add(enemy2)
+all_sprites_list.add(enemy3)
+all_sprites_list.add(enemy4)
+all_sprites_list.add(enemy5)
+
+
+all_enemy_players = pygame.sprite.Group()
+all_enemy_players.add(enemy1)
+all_enemy_players.add(enemy2)
+all_enemy_players.add(enemy3)
+all_enemy_players.add(enemy4)
+all_enemy_players.add(enemy5)
 #---------Main Program Loop----------
 screen.blit(background, (0, 0))
 while carryOn:
@@ -219,10 +305,20 @@ while carryOn:
 
 
     # --- Game logic goes here
-    if playerMain.rect.x > 665:
-        playerMain.rect.x = 665
+    if playerMain.rect.x > 720:
+        playerMain.rect.x = 720
     elif playerMain.rect.x < 0:
         playerMain.rect.x = 0
+
+
+    for enemy in all_enemy_players:
+        enemy.move_towards_player(playerMain.rect.x, playerMain.rect.y)
+        #enemy.moveForward2(speed)
+        #if enemy.rect.y == 720:
+            #enemy.move_towards_player(playerMain.rect.x, playerMain.rect.y)
+        #if enemy.rect.y > SCREENHEIGHT:
+         #   enemy.changeSpeed(random.randint(40, 60))
+          #  enemy.rect.y = -200
     # --- Draw code goes here
     screen.fill(WHITE)
     screen.blit(background, (0, 0))
@@ -233,23 +329,23 @@ while carryOn:
 
     # Draw buttons
     if level == 1:
-        colour = BLACK
+        colour = WHITE
         title = "Zombie Parashooter"
         for button in level1_buttons:
             button.draw()
     elif level == 2:
-        colour = BLACK
+        colour = WHITE
         title = "Settings"
         for button in level2_buttons:
             button.draw()
     elif level == 3:
-        colour = BLACK
+        colour = WHITE
         title = "Sound"
 
         for button in level3_buttons:
             button.draw()
     elif level == 4:
-        colour = BLACK
+        colour = WHITE
         title = "Game Instructions"
         title2 = "'D' to move right"
         title3 = "'A' to move left"
@@ -261,7 +357,7 @@ while carryOn:
     elif level == 5:
         title = " "
         keys = pygame.key.get_pressed()
-        screen.fill(BLACK)
+        
         if keys[pygame.K_LEFT]:
             playerMain.moveLeft(10)
         if keys[pygame.K_RIGHT]:
@@ -280,7 +376,7 @@ while carryOn:
     
     textSurfaceTitle = fontTitle.render(title, True, colour) 
     textRectTitle = textSurfaceTitle.get_rect()
-    textRectTitle.center = (370,50)
+    textRectTitle.center = (400,50)
 
     screen.blit(textSurfaceTitle,textRectTitle)
     if level == 4:
@@ -290,7 +386,7 @@ while carryOn:
 
         textSurfaceTitle2 = fontTitle2.render(title2, True, LIGHT_BLUE) 
         textRectTitle2 = textSurfaceTitle2.get_rect()
-        textRectTitle2.center = (370,150)
+        textRectTitle2.center = (400,150)
         screen.blit(textSurfaceTitle2,textRectTitle2)
 
         fontTitle3 = pygame.font.Font('freesansbold.ttf', 20)
@@ -300,7 +396,7 @@ while carryOn:
         textSurfaceTitle3 = fontTitle3.render(title3, True, LIGHT_BLUE) 
 
         textRectTitle3 = textSurfaceTitle3.get_rect()
-        textRectTitle3.center = (370,210)
+        textRectTitle3.center = (400,210)
         screen.blit(textSurfaceTitle3,textRectTitle3)
 
         fontTitle4 = pygame.font.Font('freesansbold.ttf', 20)
@@ -310,7 +406,7 @@ while carryOn:
         textSurfaceTitle4 = fontTitle4.render(title4, True, Blue) 
 
         textRectTitle4 = textSurfaceTitle4.get_rect()
-        textRectTitle4.center = (370,270)
+        textRectTitle4.center = (400,270)
         screen.blit(textSurfaceTitle4,textRectTitle4)
 
         fontTitle5 = pygame.font.Font('freesansbold.ttf', 20)
@@ -320,20 +416,20 @@ while carryOn:
         textSurfaceTitle5 = fontTitle5.render(title5, True, Blue) 
 
         textRectTitle5 = textSurfaceTitle5.get_rect()
-        textRectTitle5.center = (370,330)
+        textRectTitle5.center = (400,330)
         screen.blit(textSurfaceTitle5,textRectTitle5)
 
         fontTitle6 = pygame.font.Font('freesansbold.ttf', 20)
 
         textSurfaceTitle6 = fontTitle6.render(title6, True, WHITE) 
         textRectTitle6 = textSurfaceTitle6.get_rect()
-        textRectTitle6.center = (370,390)
+        textRectTitle6.center = (400,390)
         screen.blit(textSurfaceTitle6,textRectTitle6)
 
 
         textSurfaceTitle6 = fontTitle6.render(title6, True, Blue) 
         textRectTitle6 = textSurfaceTitle6.get_rect()
-        textRectTitle6.center = (370,390)
+        textRectTitle6.center = (400,390)
         screen.blit(textSurfaceTitle6,textRectTitle6)
     
     fontTitle = pygame.font.Font('freesansbold.ttf', titlesize)

@@ -35,5 +35,8 @@ class Player(pygame.sprite.Sprite):
     def changeSpeed(self, speed):
         self.speed = speed
 
+    def moveForward(self, speed):
+        self.rect.y += self.speed * speed / 20
+
 
         
