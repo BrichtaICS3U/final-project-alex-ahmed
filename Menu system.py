@@ -4,6 +4,7 @@
 import pygame, sys, random
 pygame.init()
 from PlayerClass import Player
+from EnemyClass import Enemy
 
 title = " "
 title2 = " "
@@ -34,8 +35,6 @@ SCREENWIDTH = 740
 SCREENHEIGHT = 521
 size = (SCREENWIDTH, SCREENHEIGHT)
 screen = pygame.display.set_mode(size)
-all_sprites_list = pygame.sprite.Group()
-
 
 pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffer=4096)
 pygame.mixer.music.load('A Walk in the Forest - Relax Music and Nature Sounds.mp3')
@@ -201,12 +200,26 @@ level3_buttons = [button_ON,button_OFF,button_Previous2]
 level4_buttons = [button_Previous3, button_CONTINUE]
 level5_buttons = [button_Previous3]
 
+#create groups for sprites
+all_sprites_list = pygame.sprite.Group()
+all_enemies_list = pygame.sprite.Group()
+
 #create player
 playerMain = Player(80, 80, 20)
 playerMain.rect.x = SCREENWIDTH/2
 playerMain.rect.y = SCREENHEIGHT - 100
 
 all_sprites_list.add(playerMain)
+
+#create zombies
+for i in range(5): # make 5 zombies for now
+   zombie = Enemy(80, 80, 2) #make enemies the same size as the player
+   zombie.rect.x = random.randint(0, SCREENWIDTH-80)
+   zombie.rect.y = random.randint(-400, -200)
+   all_sprites_list.add(zombie)
+   all_enemies_list.add(zombie)
+
+   
 #---------Main Program Loop----------
 screen.blit(background, (0, 0))
 while carryOn:
@@ -269,6 +282,23 @@ while carryOn:
         for button in level5_buttons:
             button.draw()
 
+        for zombie in all_enemies_list:
+            zombie.move_towards_player(playerMain)
+
+        #very simple hit mechanic
+        playerHitByZombie = pygame.sprite.spritecollide(playerMain, all_enemies_list, False)
+        for hitZombie in playerHitByZombie:
+            playerMain.life -= 1
+            print(playerMain.life)
+
+            #recycle zombies that have hit the player
+            hitZombie.rect.x = random.randint(0, SCREENWIDTH-80)
+            hitZombie.rect.y = random.randint(-400, -200)
+
+        if playerMain.life < 1: #player is dead
+            print('you died')
+            carryOn = False
+            
         all_sprites_list.update()
         all_sprites_list.draw(screen)
     
