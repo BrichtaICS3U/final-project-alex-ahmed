@@ -213,7 +213,9 @@ all_sprites_list.add(playerMain)
 
 #create zombies
 for i in range(5): # make 5 zombies for now
+
    zombie = Enemy(80, 80, 3) #make enemies the same size as the player
+
    zombie.rect.x = random.randint(0, SCREENWIDTH-80)
    zombie.rect.y = random.randint(-400, -200)
    all_sprites_list.add(zombie)
@@ -282,9 +284,8 @@ while carryOn:
             button.draw()
 
         for zombie in all_enemies_list:
-            zombie.moveForward(speed)
-            if zombie.rect.y  == SCREENHEIGHT - 120:
-                zombie.move_towards_player(playerMain)
+
+            zombie.move_towards_player(playerMain)
 
         #very simple hit mechanic
         playerHitByZombie = pygame.sprite.spritecollide(playerMain, all_enemies_list, False)
