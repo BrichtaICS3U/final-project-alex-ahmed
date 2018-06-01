@@ -24,7 +24,8 @@ class Player(pygame.sprite.Sprite):
         #pygame.draw.rect(self.image,[0 , 0, self.width, self.height])
 
         self.rect = self.image.get_rect()
-        
+
+        self.life = 3
 
     def moveRight(self, pixels):
         self.rect.x += pixels

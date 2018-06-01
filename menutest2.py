@@ -312,7 +312,7 @@ while carryOn:
 
 
     for enemy in all_enemy_players:
-        enemy.move_towards_player(playerMain.rect.x, playerMain.rect.y)
+        enemy.move_towards_player(playerMain)
         #enemy.moveForward2(speed)
         #if enemy.rect.y == 720:
             #enemy.move_towards_player(playerMain.rect.x, playerMain.rect.y)

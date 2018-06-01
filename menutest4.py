@@ -5,6 +5,11 @@ import pygame, sys, random
 pygame.init()
 from PlayerClass import Player
 from EnemyClass import Enemy
+from BulletClass import Bullet
+
+bulletGain = 1
+speedBullets = 10
+enemySpeed = 4
 
 title = " "
 title2 = " "
@@ -12,9 +17,12 @@ title3 = " "
 title4 = " "
 title5 = " "
 title6 = " "
-speed = 1
+title7 = " "
+#speed = 1
 #J = "Zombie Parashooter"
-speed = 4
+#speed = 4
+speed = 20000
+damage = 5
 background = pygame.image.load("bg.jpg")
 # Define some colours
 BLACK = (0, 0, 0)
@@ -125,7 +133,29 @@ def my_instunction_function():
     """A function that will instruct the player on how to play the game"""
     global level
     bg = GREEN
-    level = 5 
+    level = 5
+
+def my_difficulty_function():
+    """A function that will allow the player to adjust the difficulty level of the game"""
+    global level
+    bg = GREEN
+    level = 5
+
+def normal_mode():
+    """A function that will enable the normal difficulty mode"""
+    global level
+    bg = Blue
+    level = 6
+    enemySpeed = 4
+
+
+def hard_mode():
+    """A function that will enable the normal difficulty mode"""
+    global level
+    bg = RED
+    level = 6
+    enemySpeed = 6
+    
     
 
 def mousebuttondown(level):
@@ -149,6 +179,10 @@ def mousebuttondown(level):
                 button.call_back()
     elif level == 5:
         for button in level5_buttons:
+            if button.rect.collidepoint(pos):
+                button.call_back()
+    elif level == 6:
+        for button in level6_buttons:
             if button.rect.collidepoint(pos):
                 button.call_back()
 
@@ -190,15 +224,21 @@ button_ON = Button("ON", (SCREENWIDTH/2, SCREENHEIGHT/4), play_music,bg=GREEN)
 button_OFF= Button("OFF", (SCREENWIDTH/2, SCREENHEIGHT*2/4),stop_music, bg=GREEN)
 button_Previous2 = Button("PREVIOUS", (SCREENWIDTH/2, SCREENHEIGHT*3/4), my_previous_function,bg=RED)
 button_Previous3 = Button("PREVIOUS",(SCREENWIDTH*0.5/4, SCREENHEIGHT*3.7/4) , my_previous_function2,bg=RED)
+button_Previous4 = Button("PREVIOUS",(SCREENWIDTH*0.5/4, SCREENHEIGHT*3.7/4) , my_previous_function2,bg=RED)
 
 button_CONTINUE = Button("CONTINUE", (SCREENWIDTH*3.5/4, SCREENHEIGHT*3.7/4),my_next_function, bg=GREEN)
+button_Difficulty = Button("DIFFICULTY", (SCREENWIDTH/2, SCREENHEIGHT*2/4),my_difficulty_function, bg=GREEN)
+
+button_Normal = Button("NORMAL", (SCREENWIDTH/2, SCREENHEIGHT/4), normal_mode,bg=GREEN)
+button_Hard= Button("HARD", (SCREENWIDTH/2, SCREENHEIGHT*2/4),hard_mode, bg=GREEN)
 
 #arrange button groups depending on level
 level1_buttons = [button_HELLO,button_SETTINGS, button_QUIT]
-level2_buttons = [button_Previous2,button_Sound,]
+level2_buttons = [button_Previous2,button_Difficulty, button_Sound,]
 level3_buttons = [button_ON,button_OFF,button_Previous2]
 level4_buttons = [button_Previous3, button_CONTINUE]
-level5_buttons = [button_Previous3]
+level6_buttons = [button_Previous4]
+level5_buttons = [button_Normal, button_Hard, button_Previous2]
 
 #create groups for sprites
 all_sprites_list = pygame.sprite.Group()
@@ -211,9 +251,17 @@ playerMain.rect.y = SCREENHEIGHT - 120
 
 all_sprites_list.add(playerMain)
 
+
+#create bullets
+for j in range (20):
+    bullets = Bullet(10, 10, speedBullets, 5)
+    all_sprites_list.add(bullets)
+    bullets.rect.x = playerMain.rect.x + 20
+    bullets.rect.y = playerMain.rect.y + 20
+
 #create zombies
 for i in range(5): # make 5 zombies for now
-   zombie = Enemy(80, 80, 3) #make enemies the same size as the player
+   zombie = Enemy(80, 80, enemySpeed) #make enemies the same size as the player
    zombie.rect.x = random.randint(0, SCREENWIDTH-80)
    zombie.rect.y = random.randint(-400, -200)
    all_sprites_list.add(zombie)
@@ -236,6 +284,18 @@ while carryOn:
         playerMain.rect.x = 720
     elif playerMain.rect.x < 0:
         playerMain.rect.x = 0
+
+    if bullets.rect.x > 820:
+        damage == 0
+        bullets.rect.x = playerMain.rect.x + 20
+        bullets.rect.y = playerMain.rect.y + 20
+    elif bullets.rect.y > 620:
+        j -= 1
+        damage == 0
+        bullets.rect.x = playerMain.rect.x + 20
+        bullets.rect.y = playerMain.rect.y + 20
+
+    
     # --- Draw code goes here
     screen.fill(WHITE)
     screen.blit(background, (0, 0))
@@ -272,25 +332,42 @@ while carryOn:
         for button in level4_buttons:
             button.draw()
     elif level == 5:
+        colour = BLACK
+        title = "Difficulty"
+        for button in level5_buttons:
+            button.draw()
+
+    elif level == 6:
+        title7 = "Bullets Remaining: " + str(j) +  " " + str(bulletGain)
         title = " "
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
             playerMain.moveLeft(10)
+            bullets.goLeft(10)
         if keys[pygame.K_RIGHT]:
             playerMain.moveRight(10)
-        for button in level5_buttons:
+            bullets.goRight(20)
+        if keys[pygame.K_UP]:
+            bullets.shootBulletUp(speed)
+        
+        for button in level6_buttons:
             button.draw()
 
         for zombie in all_enemies_list:
-            zombie.moveForward(speed)
-            if zombie.rect.y  == SCREENHEIGHT - 120:
-                zombie.move_towards_player(playerMain)
+            #zombie.moveForward(speed)
+            #if zombie.rect.y  == SCREENHEIGHT - 120:
+            zombie.move_towards_player(playerMain)
 
         #very simple hit mechanic
+        #zombieHitByPlayer = pygame.sprite.spritecollide(bullets, all_enemies_list, False)
         playerHitByZombie = pygame.sprite.spritecollide(playerMain, all_enemies_list, False)
         for hitZombie in playerHitByZombie:
             playerMain.life -= 1
             print(playerMain.life)
+
+        #for hitPlayer in zombieHitByPlayer:
+            #zombie.life -= 5
+            #print(zombie.life)
 
             #recycle zombies that have hit the player
             hitZombie.rect.x = random.randint(0, SCREENWIDTH-80)
@@ -299,6 +376,31 @@ while carryOn:
         if playerMain.life < 1: #player is dead
             print('you died')
             carryOn = False
+
+        zombieHitByPlayer = pygame.sprite.spritecollide(bullets, all_enemies_list, False)
+        for hitPlayer in zombieHitByPlayer:
+            zombie.life -= 5
+            bulletGain = random.randint (1, 5)
+            if  bulletGain == 5:   
+                j += 5
+            else:
+                j -= 1
+            print(zombie.life)
+
+            #recycle zombies that have hit the player
+            hitPlayer.rect.x = random.randint(0, SCREENWIDTH-80)
+            hitPlayer.rect.y = random.randint(-400, -200)
+            bullets.rect.x = playerMain.rect.x + 20
+            bullets.rect.y = playerMain.rect.y + 20
+        
+
+        if zombie.life < 1: #player is dead
+            print('one zombie dead')
+            zombie.rect.x = random.randint(0, SCREENWIDTH-80)
+            zombie.rect.y = random.randint(-400, -200)
+            zombie.life == 10
+            
+        
             
         all_sprites_list.update()
         all_sprites_list.draw(screen)
@@ -369,6 +471,15 @@ while carryOn:
     
     fontTitle = pygame.font.Font('freesansbold.ttf', titlesize)
 
+    fontTitle7 = pygame.font.Font('freesansbold.ttf', 10)
+
+    textSurfaceTitle7 = fontTitle7.render(title7, True, Blue) 
+    textRectTitle7 = textSurfaceTitle7.get_rect()
+    textRectTitle7.center = (400,390)
+    screen.blit(textSurfaceTitle7,textRectTitle7)
+
+    fontTitle7 = pygame.font.Font('freesansbold.ttf', 10)
+
 
     # Update the screen with queued shapes
     pygame.display.flip()
@@ -377,3 +488,5 @@ while carryOn:
     clock.tick(60)
 
 pygame.quit()
+
+
