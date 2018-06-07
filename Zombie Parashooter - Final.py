@@ -22,9 +22,9 @@ title4 = " "
 title5 = " "
 title6 = " "
 title7 = " "
-#speed = 1
-#J = "Zombie Parashooter"
-#speed = 4
+
+
+
 speed = 20000
 damage = 5
 background = pygame.image.load("bg.jpg")
@@ -209,14 +209,14 @@ def stop_music():
 
 level = 1
 title = "Zombie Parashooter"
-title2 = "'D' to move right"
+
 titlesize = 30
 titlex = 400
 
 carryOn = True
 clock = pygame.time.Clock()
 
-#create button objects
+#create titles
 
 fontTitle = pygame.font.Font('freesansbold.ttf', titlesize)
 textSurfaceTitle = fontTitle.render(title, True, BLACK) 
@@ -228,6 +228,7 @@ textSurfaceTitle2 = fontTitle2.render(title2, True, BLACK)
 textRectTitle2 = textSurfaceTitle2.get_rect()
 textRectTitle2.center = (400,80)
 
+#create button objects
 
 button_HELLO = Button("PLAY", (SCREENWIDTH/2, SCREENHEIGHT/4), my_hello, bg=BLUE)
 button_Previous = Button("PREVIOUS", (SCREENWIDTH/2, SCREENHEIGHT/4), my_previous_function,bg=BLACK_BLUE)
@@ -274,7 +275,7 @@ for j in range (20):
     bullets.rect.y = playerMain.rect.y + 20
 
 #create zombies
-for i in range(enemyCount): # make 5 zombies for now
+for i in range(enemyCount): # make x zombies 
    zombie = Enemy(80, 80, enemySpeed) #make enemies the same size as the player
    zombie.rect.x = random.randint(0, SCREENWIDTH-80)
    zombie.rect.y = random.randint(-400, -200)
@@ -374,20 +375,16 @@ while carryOn:
             button.draw()
 
         for zombie in all_enemies_list:
-            #zombie.moveForward(speed)
-            #if zombie.rect.y  == SCREENHEIGHT - 120:
             zombie.move_towards_player(playerMain)
 
         #very simple hit mechanic
-        #zombieHitByPlayer = pygame.sprite.spritecollide(bullets, all_enemies_list, False)
+       
         playerHitByZombie = pygame.sprite.spritecollide(playerMain, all_enemies_list, False)
         for hitZombie in playerHitByZombie:
             playerMain.life -= 1
             print(playerMain.life)
 
-        #for hitPlayer in zombieHitByPlayer:
-            #zombie.life -= 5
-            #print(zombie.life)
+        
 
             #recycle zombies that have hit the player
             hitZombie.rect.x = random.randint(0, SCREENWIDTH-80)
