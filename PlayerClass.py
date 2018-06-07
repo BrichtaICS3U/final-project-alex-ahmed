@@ -3,7 +3,7 @@ WHITE = (255, 255, 255)
 
 class Player(pygame.sprite.Sprite):
 
-    def __init__(self, width, height, speed):
+    def __init__(self, width, height, speed, life):
 
         super().__init__()
 
@@ -19,14 +19,14 @@ class Player(pygame.sprite.Sprite):
         self.height = height
         self.speed = speed
         #self.attack = attack
-
+        self.life = life
 
         #pygame.draw.rect(self.image,[0 , 0, self.width, self.height])
 
         self.rect = self.image.get_rect()
 
 
-        self.life = 3
+        #self.life = 3
 
 
     def moveRight(self, pixels):

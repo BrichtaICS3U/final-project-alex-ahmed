@@ -1,6 +1,6 @@
 # Menu template with button class and basic menu navigation
 # Adapted from http://www.dreamincode.net/forums/topic/401541-buttons-and-sliders-in-pygame/
-
+# https://www.google.ca/search?safe=strict&rlz=1C1GGRV_enCA795CA795&biw=1440&bih=794&tbs=ic%3Atrans&tbm=isch&sa=1&ei=U1EVW_SZKcXAsQXF7L3YCg&q=zombie+cartoon&oq=zombie+cartoon&gs_l=img.3..0l10.6117.7897.0.8180.8.5.0.3.3.0.130.462.4j1.5.0....0...1c.1.64.img..0.8.491...0i67k1.0.fJw7ePorLRc#imgrc=_
 import pygame, sys, random
 pygame.init()
 from PlayerClass import Player
@@ -9,7 +9,6 @@ from BulletClass import Bullet
 
 bulletGain = 1
 speedBullets = 10
-enemySpeed = 4
 
 title = " "
 title2 = " "
@@ -34,10 +33,12 @@ BRIGHT_RED = (241,126,137)
 BOLD_RED = (226,0,0)
 BRIGHT_Blue = (135,212,223)
 Blue = (67,188,205)
-
-PURE_GREEN = (0, 255, 0)
-PURE_BLUE = (0, 0, 255)
-LIGHT_BLUE = (0, 232, 224)
+PURPLE =(85, 7, 54)
+#buttons
+LIGHT_BLUE = (114, 141, 165)
+BLUE = (74,107,138)
+DARK_BLUE = (19,52,83)
+BLACK_BLUE =(4, 30, 55)
 
 SCREENWIDTH = 800
 SCREENHEIGHT = 600
@@ -61,7 +62,7 @@ class Button():
        font_name = name of font
        font_size = size of font
     """
-    def __init__(self, txt, location, action, bg=WHITE, fg=BLACK, size=(100, 40), font_name="Segoe Print", font_size=16):
+    def __init__(self, txt, location, action, bg=WHITE, fg=WHITE, size=(100, 40), font_name="Segoe Print", font_size=16):
         self.color = bg  # the static (normal) color
         self.bg = bg  # actual background color, can change on mouseover
         self.fg = fg  # text color
@@ -133,29 +134,7 @@ def my_instunction_function():
     """A function that will instruct the player on how to play the game"""
     global level
     bg = GREEN
-    level = 5
-
-def my_difficulty_function():
-    """A function that will allow the player to adjust the difficulty level of the game"""
-    global level
-    bg = GREEN
-    level = 5
-
-def normal_mode():
-    """A function that will enable the normal difficulty mode"""
-    global level
-    bg = Blue
-    level = 6
-    enemySpeed = 4
-
-
-def hard_mode():
-    """A function that will enable the normal difficulty mode"""
-    global level
-    bg = RED
-    level = 6
-    enemySpeed = 6
-    
+    level = 5 
     
 
 def mousebuttondown(level):
@@ -179,10 +158,6 @@ def mousebuttondown(level):
                 button.call_back()
     elif level == 5:
         for button in level5_buttons:
-            if button.rect.collidepoint(pos):
-                button.call_back()
-    elif level == 6:
-        for button in level6_buttons:
             if button.rect.collidepoint(pos):
                 button.call_back()
 
@@ -215,37 +190,32 @@ textRectTitle2 = textSurfaceTitle2.get_rect()
 textRectTitle2.center = (400,80)
 
 
-button_HELLO = Button("PLAY", (SCREENWIDTH/2, SCREENHEIGHT/4), my_hello, bg=RED)
-button_Previous = Button("PREVIOUS", (SCREENWIDTH/2, SCREENHEIGHT/4), my_previous_function,bg=RED)
-button_SETTINGS = Button("SETTINGS", (SCREENWIDTH/2, SCREENHEIGHT*2/4),my_next_function, bg=GREEN)
-button_QUIT = Button("QUIT", (SCREENWIDTH/2, SCREENHEIGHT*3/4), my_quit_function, bg=Blue)
-button_Sound = Button("SOUND", (SCREENWIDTH/2, SCREENHEIGHT*1/4),my_next_function, bg=GREEN)
-button_ON = Button("ON", (SCREENWIDTH/2, SCREENHEIGHT/4), play_music,bg=GREEN)
-button_OFF= Button("OFF", (SCREENWIDTH/2, SCREENHEIGHT*2/4),stop_music, bg=GREEN)
-button_Previous2 = Button("PREVIOUS", (SCREENWIDTH/2, SCREENHEIGHT*3/4), my_previous_function,bg=RED)
-button_Previous3 = Button("PREVIOUS",(SCREENWIDTH*0.5/4, SCREENHEIGHT*3.7/4) , my_previous_function2,bg=RED)
-button_Previous4 = Button("PREVIOUS",(SCREENWIDTH*0.5/4, SCREENHEIGHT*3.7/4) , my_previous_function2,bg=RED)
+button_HELLO = Button("PLAY", (SCREENWIDTH/2, SCREENHEIGHT/4), my_hello, bg=BLUE)
+button_Previous = Button("PREVIOUS", (SCREENWIDTH/2, SCREENHEIGHT/4), my_previous_function,bg=BLACK_BLUE)
+button_SETTINGS = Button("SETTINGS", (SCREENWIDTH/2, SCREENHEIGHT*2/4),my_next_function, bg=DARK_BLUE)
+button_QUIT = Button("QUIT", (SCREENWIDTH/2, SCREENHEIGHT*3/4), my_quit_function, bg=BLACK_BLUE)
+button_Sound = Button("SOUND", (SCREENWIDTH/2, SCREENHEIGHT*1/4),my_next_function, bg=BLUE)
+button_ON = Button("ON", (SCREENWIDTH/2, SCREENHEIGHT/4), play_music,bg=BLUE)
+button_OFF= Button("OFF", (SCREENWIDTH/2, SCREENHEIGHT*2/4),stop_music, bg=DARK_BLUE)
+button_Previous2 = Button("PREVIOUS", (SCREENWIDTH/2, SCREENHEIGHT*3/4), my_previous_function,bg=BLACK_BLUE)
+button_Previous3 = Button("PREVIOUS",(SCREENWIDTH*0.5/4, SCREENHEIGHT*3.7/4) , my_previous_function2,bg=BLACK_BLUE)
+button_Previous4 = Button("PREVIOUS",(SCREENWIDTH*0.5/4, SCREENHEIGHT*3.7/4) , my_previous_function2,bg=BLACK_BLUE)
 
-button_CONTINUE = Button("CONTINUE", (SCREENWIDTH*3.5/4, SCREENHEIGHT*3.7/4),my_next_function, bg=GREEN)
-button_Difficulty = Button("DIFFICULTY", (SCREENWIDTH/2, SCREENHEIGHT*2/4),my_difficulty_function, bg=GREEN)
-
-button_Normal = Button("NORMAL", (SCREENWIDTH/2, SCREENHEIGHT/4), normal_mode,bg=GREEN)
-button_Hard= Button("HARD", (SCREENWIDTH/2, SCREENHEIGHT*2/4),hard_mode, bg=GREEN)
+button_CONTINUE = Button("CONTINUE", (SCREENWIDTH*3.5/4, SCREENHEIGHT*3.7/4),my_next_function, bg=BLUE)
 
 #arrange button groups depending on level
 level1_buttons = [button_HELLO,button_SETTINGS, button_QUIT]
-level2_buttons = [button_Previous2,button_Difficulty, button_Sound,]
+level2_buttons = [button_Previous2,button_Sound,]
 level3_buttons = [button_ON,button_OFF,button_Previous2]
 level4_buttons = [button_Previous3, button_CONTINUE]
-level6_buttons = [button_Previous4]
-level5_buttons = [button_Normal, button_Hard, button_Previous2]
+level5_buttons = [button_Previous4]
 
 #create groups for sprites
 all_sprites_list = pygame.sprite.Group()
 all_enemies_list = pygame.sprite.Group()
 
 #create player
-playerMain = Player(80, 80, 20)
+playerMain = Player(80, 80, 20, 1)
 playerMain.rect.x = SCREENWIDTH/2
 playerMain.rect.y = SCREENHEIGHT - 120
 
@@ -261,7 +231,7 @@ for j in range (20):
 
 #create zombies
 for i in range(5): # make 5 zombies for now
-   zombie = Enemy(80, 80, enemySpeed) #make enemies the same size as the player
+   zombie = Enemy(80, 80, 4) #make enemies the same size as the player
    zombie.rect.x = random.randint(0, SCREENWIDTH-80)
    zombie.rect.y = random.randint(-400, -200)
    all_sprites_list.add(zombie)
@@ -306,23 +276,23 @@ while carryOn:
 
     # Draw buttons
     if level == 1:
-        colour = BLACK
+        colour = WHITE
         title = "Zombie Parashooter"
         for button in level1_buttons:
             button.draw()
     elif level == 2:
-        colour = BLACK
+        colour = WHITE
         title = "Settings"
         for button in level2_buttons:
             button.draw()
     elif level == 3:
-        colour = BLACK
+        colour = WHITE
         title = "Sound"
 
         for button in level3_buttons:
             button.draw()
     elif level == 4:
-        colour = BLACK
+        colour = WHITE
         title = "Game Instructions"
         title2 = "'D' to move right"
         title3 = "'A' to move left"
@@ -332,12 +302,6 @@ while carryOn:
         for button in level4_buttons:
             button.draw()
     elif level == 5:
-        colour = BLACK
-        title = "Difficulty"
-        for button in level5_buttons:
-            button.draw()
-
-    elif level == 6:
         title7 = "Bullets Remaining: " + str(j) +  " " + str(bulletGain)
         title = " "
         keys = pygame.key.get_pressed()
@@ -349,8 +313,7 @@ while carryOn:
             bullets.goRight(20)
         if keys[pygame.K_UP]:
             bullets.shootBulletUp(speed)
-        
-        for button in level6_buttons:
+        for button in level5_buttons:
             button.draw()
 
         for zombie in all_enemies_list:
@@ -421,7 +384,7 @@ while carryOn:
 
         textSurfaceTitle2 = fontTitle2.render(title2, True, WHITE) 
 
-        textSurfaceTitle2 = fontTitle2.render(title2, True, LIGHT_BLUE) 
+        textSurfaceTitle2 = fontTitle2.render(title2, True, BLUE) 
         textRectTitle2 = textSurfaceTitle2.get_rect()
         textRectTitle2.center = (400,150)
         screen.blit(textSurfaceTitle2,textRectTitle2)
@@ -430,7 +393,7 @@ while carryOn:
 
         textSurfaceTitle3 = fontTitle3.render(title3, True, WHITE) 
 
-        textSurfaceTitle3 = fontTitle3.render(title3, True, LIGHT_BLUE) 
+        textSurfaceTitle3 = fontTitle3.render(title3, True, BLUE) 
 
         textRectTitle3 = textSurfaceTitle3.get_rect()
         textRectTitle3.center = (400,210)
@@ -440,7 +403,7 @@ while carryOn:
 
         textSurfaceTitle4 = fontTitle4.render(title4, True, WHITE) 
 
-        textSurfaceTitle4 = fontTitle4.render(title4, True, Blue) 
+        textSurfaceTitle4 = fontTitle4.render(title4, True, BLUE) 
 
         textRectTitle4 = textSurfaceTitle4.get_rect()
         textRectTitle4.center = (400,270)
@@ -450,7 +413,7 @@ while carryOn:
 
         textSurfaceTitle5 = fontTitle5.render(title5, True, WHITE) 
 
-        textSurfaceTitle5 = fontTitle5.render(title5, True, Blue) 
+        textSurfaceTitle5 = fontTitle5.render(title5, True, BLUE) 
 
         textRectTitle5 = textSurfaceTitle5.get_rect()
         textRectTitle5.center = (400,330)
@@ -458,13 +421,13 @@ while carryOn:
 
         fontTitle6 = pygame.font.Font('freesansbold.ttf', 20)
 
-        textSurfaceTitle6 = fontTitle6.render(title6, True, WHITE) 
+        textSurfaceTitle6 = fontTitle6.render(title6, True, BLUE) 
         textRectTitle6 = textSurfaceTitle6.get_rect()
         textRectTitle6.center = (400,390)
         screen.blit(textSurfaceTitle6,textRectTitle6)
 
 
-        textSurfaceTitle6 = fontTitle6.render(title6, True, Blue) 
+        textSurfaceTitle6 = fontTitle6.render(title6, True, BLUE) 
         textRectTitle6 = textSurfaceTitle6.get_rect()
         textRectTitle6.center = (400,390)
         screen.blit(textSurfaceTitle6,textRectTitle6)
@@ -473,7 +436,7 @@ while carryOn:
 
     fontTitle7 = pygame.font.Font('freesansbold.ttf', 10)
 
-    textSurfaceTitle7 = fontTitle7.render(title7, True, Blue) 
+    textSurfaceTitle7 = fontTitle7.render(title7, True, BLUE) 
     textRectTitle7 = textSurfaceTitle7.get_rect()
     textRectTitle7.center = (400,390)
     screen.blit(textSurfaceTitle7,textRectTitle7)
@@ -488,5 +451,4 @@ while carryOn:
     clock.tick(60)
 
 pygame.quit()
-
 

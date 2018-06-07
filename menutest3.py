@@ -44,7 +44,7 @@ size = (SCREENWIDTH, SCREENHEIGHT)
 screen = pygame.display.set_mode(size)
 
 pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffer=4096)
-pygame.mixer.music.load('A Walk in the Forest - Relax Music and Nature Sounds.mp3')
+pygame.mixer.music.load('Call of Duty - Black Ops - Nazi Zombie - Damned.mp3')
 pygame.mixer.music.play(-1)
 
 
@@ -213,7 +213,7 @@ all_sprites_list = pygame.sprite.Group()
 all_enemies_list = pygame.sprite.Group()
 
 #create player
-playerMain = Player(80, 80, 20)
+playerMain = Player(80, 80, 20, 1)
 playerMain.rect.x = SCREENWIDTH/2
 playerMain.rect.y = SCREENHEIGHT - 120
 
@@ -221,14 +221,16 @@ all_sprites_list.add(playerMain)
 
 
 #create bullets
-for j in range (20):
+for j in range (8):
     bullets = Bullet(10, 10, speedBullets, 5)
     all_sprites_list.add(bullets)
     bullets.rect.x = playerMain.rect.x + 20
     bullets.rect.y = playerMain.rect.y + 20
 
+
+
 #create zombies
-for i in range(5): # make 5 zombies for now
+for i in range(7): # make 5 zombies for now
    zombie = Enemy(80, 80, 4) #make enemies the same size as the player
    zombie.rect.x = random.randint(0, SCREENWIDTH-80)
    zombie.rect.y = random.randint(-400, -200)
@@ -303,6 +305,8 @@ while carryOn:
         title7 = "Bullets Remaining: " + str(j) +  " " + str(bulletGain)
         title = " "
         keys = pygame.key.get_pressed()
+       
+
         if keys[pygame.K_LEFT]:
             playerMain.moveLeft(10)
             bullets.goLeft(10)
@@ -343,7 +347,7 @@ while carryOn:
             zombie.life -= 5
             bulletGain = random.randint (1, 5)
             if  bulletGain == 5:   
-                j += 5
+                j += 1
             else:
                 j -= 1
             print(zombie.life)

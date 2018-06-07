@@ -11,7 +11,8 @@ class Enemy(pygame.sprite.Sprite):
 
         super().__init__()
 
-        self.image = pygame.image.load("zombie.png")#.convert()
+        self.image = pygame.image.load("zombiee.png").convert()
+        self.image.set_colorkey(BLACK)
         self.image = pygame.transform.scale(self.image,(width, height))
 
         self.width = width
